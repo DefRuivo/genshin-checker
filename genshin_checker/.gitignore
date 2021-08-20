@@ -131,3 +131,4 @@ dmypy.json
 *.ts
 /genshin-db/*.js
 /genshin-db/*.md
+.vscode
