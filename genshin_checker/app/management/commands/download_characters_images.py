@@ -1,34 +1,23 @@
-import requests, json, os
+import os, json, requests, sys
+from django.core.management.base import BaseCommand
 
 
-class static_images_updater:
-    def __init__(self, dir_repo="genshin-db", path=None) -> None:
+class Command(BaseCommand):
+    help = "Download images from links stored on 'genshin-db' repo"
 
-        """Download images from wiki, the urls are stored on genshin-db repo locally
+    def add_arguments(self, parser):
+        parser.add_argument("folder_repo", nargs="?", default="genshin-db", type=str)
+        parser.add_argument("path", nargs="?", default=None, type=str)
 
-        Args:
-            dir_repo (str): The default is 'genshin-db', but if the repo gets another name just
-            change it to whatever it is
-        """
-
-        self.directory_repo = dir_repo
-        self.path = os.path.dirname(__file__) if path is None else path
+    def handle(self, *args, **options):
+        self.directory_repo = options["folder_repo"]
+        self.path = (
+            os.path.dirname(__file__) if options["path"] is None else options["path"]
+        )
         self.file_dir = self.images_path_dir(self.directory_repo)
         images_urls = self.handle_images_urls(self.file_dir)
         self.download_images(images_urls)
-        print("All done")
-
-    @staticmethod
-    def images_path_dir(directory) -> str:
-        """Return characters json with all urls
-
-        Args:
-            directory ([type]): [description]
-
-        Returns:
-            str: [description]
-        """
-        return os.path.join(directory, f"src/data/image/characters.json")
+        sys.stdout.write("Finished\n")
 
     def handle_images_urls(self, file_dir: str) -> dict:
         """Get JSON file and parse for images urls, returning a dictionary with names and urls
@@ -57,23 +46,30 @@ class static_images_updater:
         Args:
             urls (dict): "albedo":"https://..."
         """
-
-        self.make_directory()
-        path = os.path.dirname(__file__)
-        print(path)
+        path = self.make_static_folder()
         for key, value in urls.items():
             response = requests.get(value)
             with open(f"{path}/static/{key}.png", "wb") as image_data:
                 image_data.write(response.content)
 
     @staticmethod
-    def make_directory() -> None:
+    def make_static_folder() -> str:
         """Create folder "static" to store images if it doesn't exists
-        """      
-        try:
-            os.mkdir("static")
-        except FileExistsError:
-            pass
 
+        Returns:
+            str: return static folder directory
+        """
+        os.makedirs("static", exist_ok=True)
+        return os.path.abspath(os.path.dirname(__name__))
 
-static_images_updater()
+    @staticmethod
+    def images_path_dir(directory) -> str:
+        """Return characters json with all urls
+
+        Args:
+            directory (str): 'src/data/image/characters.json'
+
+        Returns:
+            str: 'genshin-db/src/data/image/characters.json'
+        """
+        return os.path.join(directory, f"src/data/image/characters.json")
