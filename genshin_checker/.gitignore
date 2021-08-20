@@ -129,3 +129,5 @@ dmypy.json
 .pyre/
 
 *.ts
+/genshin-db/*.js
+/genshin-db/*.md
