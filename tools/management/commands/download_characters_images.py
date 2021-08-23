@@ -1,4 +1,8 @@
-import os, json, requests, sys
+import json
+import os
+import sys
+
+import requests
 from django.core.management.base import BaseCommand
 
 

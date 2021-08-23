@@ -1,4 +1,7 @@
-import requests, json, os
+import json
+import os
+
+import requests
 
 
 class static_images_updater:
@@ -69,7 +72,7 @@ class static_images_updater:
     @staticmethod
     def make_directory() -> None:
         """Create folder "static" to store images if it doesn't exists
-        """      
+        """
         try:
             os.mkdir("static")
         except FileExistsError:
