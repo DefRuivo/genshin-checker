@@ -53,7 +53,7 @@ class Command(BaseCommand):
         path = self.make_static_folder()
         for key, value in urls.items():
             response = requests.get(value)
-            with open(f"{path}/static/{key}.png", "wb") as image_data:
+            with open(f"{path}/static/images/characters/{key}.png", "wb") as image_data:
                 image_data.write(response.content)
 
     @staticmethod
