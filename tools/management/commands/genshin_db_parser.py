@@ -15,9 +15,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         directory_repo = options["folder_repo"]
-        path = (
-            os.path.dirname(__file__) if options["path"] is None else options["path"]
-        )
+        path = os.path.dirname(__file__) if options["path"] is None else options["path"]
 
         path = self.make_static_folder()
         file_dir = self.images_path_dir(directory_repo)
@@ -25,7 +23,7 @@ class Command(BaseCommand):
         self.download_images(images_urls, path)
         sys.stdout.write("Finished\n")
 
-    def handle_images_urls(self, file_dir: str, path:str) -> dict:
+    def handle_images_urls(self, file_dir: str, path: str) -> dict:
         """Get JSON file and parse for images urls, returning a dictionary with names and urls
 
         Args:
@@ -45,7 +43,7 @@ class Command(BaseCommand):
                     pass
         return urls
 
-    def download_images(self, urls: dict, path:str) -> None:
+    def download_images(self, urls: dict, path: str) -> None:
         """Download images from dict which "key:CharacterName" and "Value:Url",
         it will overwrite previous images stored in the folder
 
@@ -64,8 +62,8 @@ class Command(BaseCommand):
         Returns:
             str: return static folder directory
         """
-        caminho = os.path.abspath(os.path.dirname(__file__))
-        subprocess.call(f"{caminho}/clone_repo.sh")
+        path = os.path.abspath(os.path.dirname(__file__))
+        subprocess.call(f"{path}/clone_repo.sh")
         os.makedirs("static", exist_ok=True)
         return os.path.abspath(os.path.dirname(__name__))
 
