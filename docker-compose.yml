@@ -16,7 +16,7 @@ services:
       - db
   db:
     image: mysql:8
-    container_name: genshin-db
+    container_name: db
     hostname: db
     command: --default-authentication-plugin=mysql_native_password
     tty: true
