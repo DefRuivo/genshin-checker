@@ -133,3 +133,4 @@ dmypy.json
 /genshin-db/*.js
 /genshin-db/*.md
 .vscode
+parse_images.py
